@@ -18,10 +18,10 @@ WORKDIR /app
 RUN mkdir -p /app/core
 
 # Copy the built binary
-COPY --from=builder /src/portal-svc /app/portal-svc
+COPY --from=builder /src/portal-svc /usr/local/bin/portal-svc
 
 # Copy configuration templates
 COPY templates/remote_config.tmpl.json /app/templates/remote_config.tmpl.json
 
 # Set the entrypoint to the remote binary
-ENTRYPOINT ["/app/portal-svc"]
+ENTRYPOINT ["portal-svc"]
