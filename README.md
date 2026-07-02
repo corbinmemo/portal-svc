@@ -55,6 +55,7 @@ portal-svc generate
 ```bash
 docker run --rm -v $(pwd):/app ghcr.io/hallmaxwell/portal-svc:latest generate
 ```
+*(Note: Do not mount your current directory to `/app` without specific files if it overwrites the internal files in older versions. For the latest version, this is safe as the binary is now in `/usr/local/bin/`.)*
 
 This command will:
 1. Generate a secure `.env` file containing necessary cryptographic keys and identifiers.
