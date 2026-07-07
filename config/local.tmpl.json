@@ -72,7 +72,7 @@
     {
       "type": "tun",
       "tag": "tun-in",
-      "interface_name": "sing-box",
+      "interface_name": "portal-svc",
       "address": [
         "172.19.0.1/30"
       ],

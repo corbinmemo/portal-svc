@@ -6,6 +6,6 @@ services:
     network_mode: host
     env_file: .env
     volumes:
-      - ./templates/remote_config.tmpl.json:/app/templates/remote_config.tmpl.json
+      - ./config/remote.tmpl.json:/app/config/remote.tmpl.json
       - ./srs_cache:/app/srs
       - /etc/localtime:/etc/localtime:ro

@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	defaultRemoteConfig = "templates/remote_config.tmpl.json"
+	defaultRemoteConfig = "config/remote.tmpl.json"
 	tempConfig          = "remote.config.run.json"
 )
 
@@ -126,13 +126,13 @@ func handleGenerateCmd(args []string) {
 	cwd, err := os.Getwd()
 	shared.CheckError(err, "Failed to get current directory: %v", err)
 
-	tmplDir := filepath.Join(cwd, "templates")
-	shared.CheckError(os.MkdirAll(tmplDir, 0755), "Failed to create templates directory: %v")
+	tmplDir := filepath.Join(cwd, "config")
+	shared.CheckError(os.MkdirAll(tmplDir, 0755), "Failed to create config directory: %v")
 
-	tmplPath := filepath.Join(tmplDir, "remote_config.tmpl.json")
+	tmplPath := filepath.Join(tmplDir, "remote.tmpl.json")
 	if _, err := os.Stat(tmplPath); os.IsNotExist(err) {
 		// Download from GitHub
-		p.Info("Downloading latest remote_config.tmpl.json...")
+		p.Info("Downloading latest remote.tmpl.json...")
 		url := "https://raw.githubusercontent.com/hallmaxwell/portal-svc/main/templates/remote_config.tmpl.json"
 		shared.CheckError(shared.DownloadFile(url, tmplPath), "Failed to download template: %v")
 		p.Success(fmt.Sprintf("Downloaded template to %s", tmplPath))

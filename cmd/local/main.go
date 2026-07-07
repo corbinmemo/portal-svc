@@ -15,7 +15,6 @@ import (
 
 	_ "embed"
 	"portal-svc/shared"
-	"portal-svc/templates"
 	"portal-svc/ui"
 	"portal-svc/util"
 	"portal-svc/util/tweak"
@@ -24,9 +23,8 @@ import (
 	"github.com/nxadm/tail"
 )
 
-
 const (
-	defaultConfig = "templates/local_config.tmpl.json"
+	defaultConfig = "config/local.tmpl.json"
 	tempConfig    = "local.config.run.json"
 
 	serviceName        = "PortalDaemon"
@@ -296,12 +294,12 @@ func handleGenerateCmd(args []string) {
 
 	p.Info("Generating local environment template...")
 
-	tmplName := "local_config.tmpl.json"
+	tmplName := "local.tmpl.json"
 	tmplData, err := templates.FS.ReadFile(tmplName)
 	shared.CheckError(err, "Error: could not find embedded template '%s': %v", tmplName, err)
 
-	tmplDir := filepath.Join(baseDir, "templates")
-	shared.CheckError(os.MkdirAll(tmplDir, 0755), "Error: could not create templates directory: %v")
+	tmplDir := filepath.Join(baseDir, "config")
+	shared.CheckError(os.MkdirAll(tmplDir, 0755), "Error: could not create config directory: %v")
 
 	outPath := filepath.Join(tmplDir, tmplName)
 	if _, err := os.Stat(outPath); err == nil {

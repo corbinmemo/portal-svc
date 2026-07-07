@@ -117,7 +117,7 @@ docker run -d \
   --restart always \
   --network host \
   --env-file .env \
-  -v $(pwd)/templates/remote_config.tmpl.json:/app/templates/remote_config.tmpl.json \
+  -v $(pwd)/config/remote.tmpl.json:/app/config/remote.tmpl.json \
   -v $(pwd)/srs_cache:/app/srs \
   -v /etc/localtime:/etc/localtime:ro \
   ghcr.io/hallmaxwell/portal-svc:latest
@@ -144,7 +144,7 @@ services:
     network_mode: host
     env_file: .env
     volumes:
-      - ./templates/remote_config.tmpl.json:/app/templates/remote_config.tmpl.json
+      - ./config/remote.tmpl.json:/app/config/remote.tmpl.json
       - ./srs_cache:/app/srs
       - /etc/localtime:/etc/localtime:ro
 ```
@@ -162,13 +162,13 @@ Both versions support rendering templates for testing purposes. If you want to v
 
 ```bash
 # Local Client
-portal-svc render --config templates/local_config.tmpl.json --out final_config.json
+portal-svc render --config config/local.tmpl.json --out final_config.json
 
 # Remote Node
 docker run --rm \
   --env-file .env \
   -v $(pwd):/app \
   ghcr.io/hallmaxwell/portal-svc:latest render \
-    --config /app/templates/remote_config.tmpl.json \
+    --config /app/config/remote.tmpl.json \
     --out /app/final_config.json
 ```

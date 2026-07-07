@@ -1,9 +1,15 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>Buildx</w>
+      <w>fakeip</w>
+      <w>geoip</w>
+      <w>gvisor</w>
       <w>netsh</w>
       <w>priv</w>
       <w>taskkill</w>
+      <w>utls</w>
+      <w>vless</w>
     </words>
   </dictionary>
 </component>

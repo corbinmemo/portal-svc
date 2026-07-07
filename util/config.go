@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 	"portal-svc/ui"
 	"strings"
-
-	"portal-svc/templates"
 )
 
 // RenderConfigTemplate reads a template file, replaces placeholders with values
@@ -15,7 +13,7 @@ import (
 func RenderConfigTemplate(templatePath string, envMap map[string]string) (string, error) {
 	tempData, err := os.ReadFile(templatePath)
 	if err != nil {
-		// Fallback to embedded templates
+		// Fallback to embedded config
 		baseName := filepath.Base(templatePath)
 		tempData, err = templates.FS.ReadFile(baseName)
 		if err != nil {
