@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"portal-svc/config"
 	"portal-svc/ui"
 	"strings"
 )
@@ -15,7 +16,7 @@ func RenderConfigTemplate(templatePath string, envMap map[string]string) (string
 	if err != nil {
 		// Fallback to embedded config
 		baseName := filepath.Base(templatePath)
-		tempData, err = templates.FS.ReadFile(baseName)
+		tempData, err = config.FS.ReadFile(baseName)
 		if err != nil {
 			return "", ui.NewAppError("TMPL_READ_ERR", "Failed to read config template", err.Error(), ui.SeverityError, err)
 		}

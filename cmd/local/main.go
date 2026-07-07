@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"portal-svc/config"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -295,7 +296,7 @@ func handleGenerateCmd(args []string) {
 	p.Info("Generating local environment template...")
 
 	tmplName := "local.tmpl.json"
-	tmplData, err := templates.FS.ReadFile(tmplName)
+	tmplData, err := config.FS.ReadFile(tmplName)
 	shared.CheckError(err, "Error: could not find embedded template '%s': %v", tmplName, err)
 
 	tmplDir := filepath.Join(baseDir, "config")
