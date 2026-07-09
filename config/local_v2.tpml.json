@@ -120,13 +120,13 @@
         "tag": "geosite-cn",
         "type": "local",
         "format": "binary",
-        "path": "{config_dir}/srs/geosite-cn.srs"
+        "path": "{config_dir}//srs//geosite-cn.srs"
       },
       {
         "tag": "geoip-cn",
         "type": "local",
         "format": "binary",
-        "path": "{config_dir}/srs/geoip-cn.srs"
+        "path": "{config_dir}//srs//geoip-cn.srs"
       }
     ],
     "rules": [
