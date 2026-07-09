@@ -1,0 +1,184 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-direct",
+        "type": "udp",
+        "server": "223.5.5.5"
+      },
+      {
+        "tag": "dns-remote",
+        "type": "https",
+        "server": "8.8.8.8",
+        "detour": "remote"
+      },
+      {
+        "tag": "dns-fakeip",
+        "type": "fakeip",
+        "inet4_range": "198.18.0.0/15"
+      }
+    ],
+    "rules": [
+      {
+        "domain_suffix": [
+          "msftconnecttest.com",
+          "msftncsi.com",
+          "captive.apple.com",
+          "connectivitycheck.gstatic.com",
+          "connect.rom.miui.com",
+          "connectivitycheck.platform.hicloud.com",
+          "connect.coloros.com",
+          "connectivitycheck.oppomobile.com",
+          "connectivitycheck.vivo.com.cn",
+          "connectivity-check.ubuntu.com"
+        ],
+        "server": "dns-direct"
+      },
+      {
+        "query_type": [
+          "AAAA"
+        ],
+        "server": "dns-direct",
+        "action": "reject"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "server": "dns-direct"
+      },
+      {
+        "domain_suffix": [
+          ".cn",
+          ".edu.cn"
+        ],
+        "server": "dns-direct"
+      },
+      {
+        "query_type": [
+          "A"
+        ],
+        "server": "dns-fakeip"
+      }
+    ],
+    "final": "dns-direct",
+    "independent_cache": true
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "portal-svc",
+      "address": [
+        "172.19.0.1/30"
+      ],
+      "mtu": 1400,
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "gvisor"
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "vless",
+      "tag": "remote",
+      "server": "{DO_IP}",
+      "server_port": 443,
+      "uuid": "{UUID}",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "www.apple.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "{PUBLIC_KEY}",
+          "short_id": "{SHORT_ID}"
+        }
+      }
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    }
+  ],
+  "route": {
+    "default_domain_resolver": "dns-direct",
+    "rule_set": [
+      {
+        "tag": "geosite-cn",
+        "type": "local",
+        "format": "binary",
+        "path": "{config_dir}/srs/geosite-cn.srs"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "local",
+        "format": "binary",
+        "path": "{config_dir}/srs/geoip-cn.srs"
+      }
+    ],
+    "rules": [
+      {"action": "sniff"},
+      {
+        "domain_suffix": [
+          "msftconnecttest.com",
+          "msftncsi.com",
+          "captive.apple.com",
+          "connectivitycheck.gstatic.com",
+          "connect.rom.miui.com",
+          "connectivitycheck.platform.hicloud.com",
+          "connect.coloros.com",
+          "connectivitycheck.oppomobile.com",
+          "connectivitycheck.vivo.com.cn",
+          "connectivity-check.ubuntu.com"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "domain_suffix": "{BYPASS_DOMAINS}",
+        "outbound": "direct"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "ip_cidr": [
+          "137.184.247.234/32",
+          "192.168.0.0/16",
+          "10.0.0.0/8",
+          "172.16.0.0/12",
+          "127.0.0.0/8"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "rule_set": [
+          "geosite-cn",
+          "geoip-cn"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "domain_suffix": [
+          ".local"
+        ],
+        "outbound": "direct"
+      }
+    ],
+    "final": "remote",
+    "auto_detect_interface": true
+  }
+}
