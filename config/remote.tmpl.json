@@ -21,6 +21,12 @@
     ],
     "final": "dns-google"
   },
+  "http_clients": [
+    {
+      "tag": "rule-set-download",
+      "detour": "do-out"
+    }
+  ],
   "inbounds": [
     {
       "type": "vless",
@@ -63,28 +69,25 @@
     {
       "type": "direct",
       "tag": "do-out"
-    },
-    {
-      "type": "block",
-      "tag": "block-out"
     }
   ],
   "route": {
     "default_domain_resolver": "dns-google",
+    "default_http_client": "rule-set-download",
     "rule_set": [
       {
         "tag": "geosite-youtube",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
-        "download_detour": "do-out"
+        "http_client": "rule-set-download"
       },
       {
         "tag": "geosite-ads",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
-        "download_detour": "do-out"
+        "http_client": "rule-set-download"
       }
     ],
     "rules": [
