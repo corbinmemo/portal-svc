@@ -42,7 +42,6 @@
         "query_type": [
           "AAAA"
         ],
-        "server": "dns-direct",
         "action": "reject"
       },
       {
@@ -65,9 +64,14 @@
         "server": "dns-fakeip"
       }
     ],
-    "final": "dns-direct",
-    "independent_cache": true
+    "final": "dns-direct"
   },
+  "http_clients": [
+    {
+      "tag": "rule-set-download",
+      "detour": "remote"
+    }
+  ],
   "inbounds": [
     {
       "type": "tun",
@@ -78,8 +82,7 @@
       ],
       "mtu": 1400,
       "auto_route": true,
-      "strict_route": false,
-      "stack": "gvisor"
+      "strict_route": false
     }
   ],
   "outbounds": [
@@ -107,28 +110,25 @@
     {
       "type": "direct",
       "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
     }
   ],
   "route": {
     "default_domain_resolver": "dns-direct",
+    "default_http_client": "rule-set-download",
     "rule_set": [
       {
         "tag": "geosite-cn",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
-        "download_detour": "remote"
+        "http_client": "rule-set-download"
       },
       {
         "tag": "geoip-cn",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "remote"
+        "http_client": "rule-set-download"
       }
     ],
     "rules": [

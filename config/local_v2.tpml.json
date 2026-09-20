@@ -42,7 +42,6 @@
         "query_type": [
           "AAAA"
         ],
-        "server": "dns-direct",
         "action": "reject"
       },
       {
@@ -65,8 +64,7 @@
         "server": "dns-fakeip"
       }
     ],
-    "final": "dns-direct",
-    "independent_cache": true
+    "final": "dns-direct"
   },
   "inbounds": [
     {
@@ -78,8 +76,7 @@
       ],
       "mtu": 1400,
       "auto_route": true,
-      "strict_route": false,
-      "stack": "gvisor"
+      "strict_route": false
     }
   ],
   "outbounds": [
@@ -107,10 +104,6 @@
     {
       "type": "direct",
       "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
     }
   ],
   "route": {
