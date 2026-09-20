@@ -1,6 +1,6 @@
 services:
   portal-node:
-    image: ghcr.io/hallmaxwell/portal-svc:latest
+    image: ghcr.io/corbinmemo/portal-svc:latest
     container_name: portal-node
     restart: always
     network_mode: host

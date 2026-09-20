@@ -42,7 +42,8 @@ func RenderConfigTemplate(templatePath string, envMap map[string]string) (string
 // similar to what was done in render_config.py:
 // 1. Inbounds of type 'tun' have auto_route=false and strict_route=false
 // 2. Adds a 'ci-direct-out' outbound
-// 3. For route.rule_set, sets download_detour to 'ci-direct-out'
+// 3. Adds a shared HTTP client using 'ci-direct-out'
+// 4. For remote route.rule_set entries, uses the shared HTTP client
 func InjectCIRules(jsonContent string) (string, error) {
 	var data map[string]interface{}
 	if err := json.Unmarshal([]byte(jsonContent), &data); err != nil {
@@ -77,14 +78,32 @@ func InjectCIRules(jsonContent string) (string, error) {
 	})
 	data["outbounds"] = outbounds
 
-	// 3. route.rule_set download_detour = 'ci-direct-out'
+	// 3. Add a shared HTTP client that downloads through 'ci-direct-out'.
+	httpClientsRaw, ok := data["http_clients"]
+	var httpClients []interface{}
+	if ok {
+		if clients, isArray := httpClientsRaw.([]interface{}); isArray {
+			httpClients = clients
+		}
+	}
+	httpClients = append(httpClients, map[string]interface{}{
+		"tag":    "ci-rule-set-download",
+		"detour": "ci-direct-out",
+	})
+	data["http_clients"] = httpClients
+
+	// 4. Route remote rule-set downloads through the shared HTTP client.
 	if routeRaw, ok := data["route"]; ok {
 		if routeMap, isMap := routeRaw.(map[string]interface{}); isMap {
+			routeMap["default_http_client"] = "ci-rule-set-download"
 			if ruleSetRaw, ok := routeMap["rule_set"]; ok {
 				if ruleSets, isArray := ruleSetRaw.([]interface{}); isArray {
 					for _, ruleSetRaw := range ruleSets {
 						if ruleSet, isMap := ruleSetRaw.(map[string]interface{}); isMap {
-							ruleSet["download_detour"] = "ci-direct-out"
+							delete(ruleSet, "download_detour")
+							if ruleSet["type"] == "remote" {
+								ruleSet["http_client"] = "ci-rule-set-download"
+							}
 						}
 					}
 				}

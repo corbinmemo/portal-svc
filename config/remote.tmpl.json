@@ -7,8 +7,12 @@
     "servers": [
       {
         "tag": "dns-google",
-        "type": "udp",
-        "server": "8.8.8.8"
+        "type": "https",
+        "server": "8.8.8.8",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        }
       }
     ],
     "rules": [
@@ -57,6 +61,9 @@
       "tag": "portal-out",
       "server": "{PROXY_IP}",
       "server_port": "{PROXY_PORT}",
+      "connect_timeout": "8s",
+      "tcp_keep_alive": "30s",
+      "tcp_keep_alive_interval": "30s",
       "username": "{PROXY_USERNAME}",
       "password": "{PROXY_PASSWORD}"
     },
@@ -77,6 +84,7 @@
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
+        "update_interval": "24h",
         "download_detour": "do-out"
       },
       {
@@ -84,6 +92,7 @@
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "update_interval": "24h",
         "download_detour": "do-out"
       }
     ],
@@ -116,5 +125,11 @@
       }
     ],
     "final": "portal-out"
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db"
+    }
   }
 }
