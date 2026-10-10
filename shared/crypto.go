@@ -31,6 +31,16 @@ func GenerateShortID() (string, error) {
 	return hex.EncodeToString(b), nil
 }
 
+// GeneratePassword generates a random 32-character hex string (16 bytes)
+// suitable for use as a TUIC password.
+func GeneratePassword() (string, error) {
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(b), nil
+}
+
 // GenerateX25519KeyPair generates a base64url encoded X25519 private and public key pair.
 // Note: Sing-box uses base64url encoding without padding for X25519 keys in its configuration.
 func GenerateX25519KeyPair() (privateKey string, publicKey string, err error) {

@@ -146,29 +146,27 @@ func handleGenerateCmd(args []string) {
 		os.Exit(0)
 	}
 
-	p.Info("Generating cryptographic parameters...")
+	p.Info("Generating credentials...")
 	uuid, _ := shared.GenerateUUID()
-	shortID, _ := shared.GenerateShortID()
-	privKey, pubKey, _ := shared.GenerateX25519KeyPair()
+	password, _ := shared.GeneratePassword()
 
 	envContent := fmt.Sprintf(`UUID=%s
-PRIVATE_KEY=%s
-SHORT_ID=%s
+PASSWORD=%s
 
 # Optional Proxy Chain Parameters
 PROXY_IP=
 PROXY_PORT=
 PROXY_USERNAME=
 PROXY_PASSWORD=
-`, uuid, privKey, shortID)
+`, uuid, password)
 
 	shared.CheckError(os.WriteFile(envPath, []byte(envContent), 0600), "Failed to write .env file: %v")
 
 	p.Success("Initialization Complete! Server .env file created.")
 	p.Warning("!!! ACTION REQUIRED !!!")
 	p.Info("Copy the following parameters to your LOCAL client's .env file:")
-	p.Print(fmt.Sprintf("UUID=%s\nPUBLIC_KEY=%s\nSHORT_ID=%s", uuid, pubKey, shortID))
-	p.Warning("Keep your server's PRIVATE_KEY secret and safe.")
+	p.Print(fmt.Sprintf("UUID=%s\nPASSWORD=%s", uuid, password))
+	p.Warning("Keep your server's PASSWORD secret and safe.")
 }
 
 func printUsage() { ui.PrintHelp(p, ui.HelpConfigJSON, "main_remote") }

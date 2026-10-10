@@ -320,8 +320,7 @@ func handleGenerateCmd(args []string) {
 
 	envContent := `DO_IP=
 UUID=
-PUBLIC_KEY=
-SHORT_ID=
+PASSWORD=
 
 # List of domain suffixes to bypass proxy, formatted as JSON array elements
 # E.g., [".local", ".lan", ".company.internal"]
@@ -335,7 +334,7 @@ BYPASS_DOMAINS=[".local", ".lan"]
 	if err := util.OpenFileInEditor(envPath); err != nil {
 		p.Warning("Notice: could not automatically open .env file in editor. Please open it manually to fill in the parameters from your remote node.")
 	} else {
-		p.Warning("Please paste the UUID, PUBLIC_KEY, and SHORT_ID from your remote node, then save the file.")
+		p.Warning("Please paste the UUID and PASSWORD from your remote node, then save the file.")
 	}
 }
 

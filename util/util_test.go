@@ -5,6 +5,28 @@ import (
 	"testing"
 )
 
+func TestResolvePasswordAlias(t *testing.T) {
+	tests := []struct {
+		name     string
+		envMap   map[string]string
+		expected string
+	}{
+		{"password takes precedence", map[string]string{"PASSWORD": "p", "TUIC_PASSWORD": "t"}, "p"},
+		{"alias fills password", map[string]string{"TUIC_PASSWORD": "t"}, "t"},
+		{"both empty", map[string]string{}, ""},
+		{"password empty alias set", map[string]string{"PASSWORD": "", "TUIC_PASSWORD": "t"}, "t"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			ResolvePasswordAlias(test.envMap)
+			if got := test.envMap["PASSWORD"]; got != test.expected {
+				t.Errorf("ResolvePasswordAlias() PASSWORD = %q, expected %q", got, test.expected)
+			}
+		})
+	}
+}
+
 func TestIsRawJSONValue(t *testing.T) {
 	tests := []struct {
 		val      string

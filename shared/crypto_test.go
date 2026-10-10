@@ -2,6 +2,7 @@ package shared
 
 import (
 	"encoding/base64"
+	"encoding/hex"
 	"testing"
 )
 
@@ -22,6 +23,19 @@ func TestGenerateShortID(t *testing.T) {
 	}
 	if len(shortID) != 16 {
 		t.Errorf("Expected ShortID length 16, got %d", len(shortID))
+	}
+}
+
+func TestGeneratePassword(t *testing.T) {
+	password, err := GeneratePassword()
+	if err != nil {
+		t.Fatalf("Failed to generate password: %v", err)
+	}
+	if len(password) != 32 {
+		t.Errorf("Expected password length 32, got %d", len(password))
+	}
+	if _, err := hex.DecodeString(password); err != nil {
+		t.Errorf("Password is not valid hex: %v", err)
 	}
 }
 

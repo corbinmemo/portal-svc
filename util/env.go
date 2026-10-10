@@ -37,3 +37,21 @@ func LoadEnvMap(envPath string) (map[string]string, error) {
 
 	return envMap, nil
 }
+
+// EnvPasswordKey is the canonical environment variable name that fills the
+// {PASSWORD} template placeholder.
+const EnvPasswordKey = "PASSWORD"
+
+// EnvTUICPasswordKey is an accepted alias for the TUIC password. It is used to
+// fill {PASSWORD} when EnvPasswordKey is empty.
+const EnvTUICPasswordKey = "TUIC_PASSWORD"
+
+// ResolvePasswordAlias ensures the canonical PASSWORD key is populated,
+// accepting TUIC_PASSWORD as an alias when PASSWORD is unset or empty.
+func ResolvePasswordAlias(envMap map[string]string) {
+	if envMap[EnvPasswordKey] == "" {
+		if alias := envMap[EnvTUICPasswordKey]; alias != "" {
+			envMap[EnvPasswordKey] = alias
+		}
+	}
+}

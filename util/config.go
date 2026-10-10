@@ -23,6 +23,7 @@ func RenderConfigTemplate(templatePath string, envMap map[string]string) (string
 	}
 
 	content := string(tempData)
+	ResolvePasswordAlias(envMap)
 	for key, val := range envMap {
 		// In case val has quotes
 		val = strings.Trim(val, `"'`)
